@@ -20,7 +20,7 @@ metadata:
   version: 1.0.0
   category: engineering
   tags: [orchestration, architecture, engineering, ai-agents, workflow]
-  documentation: https://github.com/YOUR_USERNAME/kavro
+  documentation: https://github.com/a7medalyapany/kavro
 ---
 
 # Kavro - AI Engineering Orchestrator
