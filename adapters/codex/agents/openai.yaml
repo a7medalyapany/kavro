@@ -1,0 +1,17 @@
+interface:
+  display_name: "Kavro"
+  short_description: "Think before you build. Staff-level AI engineering orchestrator."
+  brand_color: "#0F0F0F"
+  default_prompt: "I need to build a new feature. Help me architect and plan it properly before writing any code."
+
+policy:
+  allow_implicit_invocation: true
+
+dependencies:
+  tools:
+    - type: "file_read"
+      description: "Read existing codebase files during Phase 1 research"
+    - type: "file_write"
+      description: "Write documentation files directly during Phase 4"
+    - type: "bash"
+      description: "Run validation scripts during Phase 7 governance"
