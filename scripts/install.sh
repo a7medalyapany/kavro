@@ -34,7 +34,7 @@ print_banner() {
   echo -e "${BOLD}${CYAN}┌─────────────────────────────────────────┐${RESET}"
   echo -e "${BOLD}${CYAN}│   Kavro - AI Engineering Orchestrator   │${RESET}"
   echo -e "${BOLD}${CYAN}│        Think before you build.          │${RESET}"
-  echo -e "${BOLD}${CYAN}│              v${KAVRO_VERSION}          │${RESET}"
+  echo -e "${BOLD}${CYAN}│              v${KAVRO_VERSION}                     │${RESET}"
   echo -e "${BOLD}${CYAN}└─────────────────────────────────────────┘${RESET}"
   echo ""
 }
@@ -51,14 +51,16 @@ log_step()    { echo -e "\n${BOLD}$1${RESET}"; }
 # keeping context window lean and focused throughout execution.
 bundle_phases() {
   local target_dir="$1"
-  mkdir -p "$target_dir/references"
-
+  # Preserve source structure under target_dir/core/phases so runtime
+  # references remain identical between repo and installed copy.
+  mkdir -p "$target_dir/core/phases"
   for phase_file in "$PHASES_DIR"/*.md; do
-    cp "$phase_file" "$target_dir/references/"
+    cp "$phase_file" "$target_dir/core/phases/"
   done
 
-  cp "$REPO_ROOT/core/KAVRO.md" "$target_dir/references/KAVRO.md"
-  log_info "Phase references bundled → references/"
+  mkdir -p "$target_dir/core"
+  cp "$REPO_ROOT/core/KAVRO.md" "$target_dir/core/KAVRO.md"
+  log_info "Phase references bundled → core/phases/"
 }
 
 # ── Detection
