@@ -134,4 +134,4 @@ Open an issue. That's what they're for.
 
 ---
 
-*Kavro v1.0.0 - https://github.com/a7medalyapany/kavro*
+*Kavro v1.0.1 - https://github.com/a7medalyapany/kavro*

@@ -332,4 +332,4 @@ For detailed specifications, load as needed:
 
 ---
 
-*Kavro v1.0.0 - Think before you build.*
+*Kavro v1.0.1 - Think before you build.*

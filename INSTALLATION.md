@@ -336,5 +336,5 @@ make validate-dist    # builds dist/ packages and validates contents
 make test-install     # simulates install/uninstall in a temp HOME
 ```
 
-*Kavro v1.0.0 - Think before you build.*
+*Kavro v1.0.1 - Think before you build.*
 *https://github.com/a7medalyapany/kavro*

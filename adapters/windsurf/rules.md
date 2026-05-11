@@ -1,5 +1,5 @@
 # Kavro - AI Engineering Orchestrator
-# Think before you build. - v1.0.0
+# Think before you build. - v1.0.1
 # Paste this into Windsurf: Settings → AI Rules → Global Rules
 # Or save as .windsurfrules in your project root for project-scoped activation.
 
@@ -216,4 +216,4 @@ core/phases/06-agent-selection.md - Phase 6 detail
 core/phases/07-governance.md     - Phase 7 detail
 
 ---
-Kavro v1.0.0 - Think before you build.
+Kavro v1.0.1 - Think before you build.

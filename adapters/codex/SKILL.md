@@ -348,4 +348,4 @@ When the user requests a focused task (debug this, fix this, explain this):
 
 ---
 
-*Kavro v1.0.0 - Think before you build.*
+*Kavro v1.0.1 - Think before you build.*
