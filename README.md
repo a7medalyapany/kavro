@@ -94,8 +94,15 @@ bash scripts/install.sh
 ### Claude Code
 
 ```bash
+# Recommended: use the universal installer which bundles phase files
+bash scripts/install.sh --claude
+
+# Manual install (legacy): copy the adapter AND include the core/ tree
+# so runtime references like core/phases/* resolve correctly after install
 git clone https://github.com/a7medalyapany/kavro.git
 cp -r kavro/adapters/claude ~/.claude/skills/kavro
+# copy the core framework and phase files into the installed skill
+cp -r kavro/core ~/.claude/skills/kavro/core
 ```
 
 ### Claude.ai (web / desktop / mobile)
@@ -110,6 +117,8 @@ bash scripts/build.sh --claude
 
 ```bash
 cp -r kavro/adapters/codex ~/.agents/skills/kavro
+# copy the core framework and phase files into the installed skill
+cp -r kavro/core /.agents/skills/kavro/core
 ```
 
 ### Cursor
@@ -130,9 +139,21 @@ See [INSTALLATION.md](./INSTALLATION.md) for detailed per-tool instructions and 
 ## Build & Validation
 
 The build and installer preserve the source layout under the installed
-skill so runtime references like `core/phases/01-research.md` resolve the
-same in dev, in dist packages, and after installation. Use the included
-validation scripts during development and in CI:
+
+same in dev, in dist packages, and after installation. The canonical layout
+produced by `bash scripts/build.sh --claude` (dist/kavro-claude.zip) is:
+
+kavro/
+├─ SKILL.md
+├─ agents/
+│  └─ openai.yaml
+├─ core/
+│  ├─ KAVRO.md
+│  └─ phases/
+│     ├─ 01-research.md
+│     └─ ...
+
+Use the included validation scripts during development and in CI:
 
 ```bash
 make test-paths       # scans the repo for broken or mixed path references
