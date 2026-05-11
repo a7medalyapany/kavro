@@ -34,7 +34,7 @@ print_banner() {
   echo -e "${BOLD}${CYAN}┌─────────────────────────────────────────┐${RESET}"
   echo -e "${BOLD}${CYAN}│   Kavro - AI Engineering Orchestrator   │${RESET}"
   echo -e "${BOLD}${CYAN}│        Think before you build.          │${RESET}"
-  echo -e "${BOLD}${CYAN}│              v${KAVRO_VERSION}                        │${RESET}"
+  echo -e "${BOLD}${CYAN}│              v${KAVRO_VERSION}          │${RESET}"
   echo -e "${BOLD}${CYAN}└─────────────────────────────────────────┘${RESET}"
   echo ""
 }
