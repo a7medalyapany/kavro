@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# Kavro - Build Script
+# Kavro — Build Script
 # Assembles distributable packages for each adapter.
 # Run this before publishing a new release.
 #
 # Usage:
-#   bash scripts/build.sh           - build all packages
-#   bash scripts/build.sh --claude  - Claude package only
-#   bash scripts/build.sh --codex   - Codex package only
-#   bash scripts/build.sh --clean   - remove dist/ folder
+#   bash scripts/build.sh           — build all packages
+#   bash scripts/build.sh --claude  — Claude package only
+#   bash scripts/build.sh --codex   — Codex package only
+#   bash scripts/build.sh --clean   — remove dist/ folder
 #
 # Output:
 #   dist/kavro-claude.zip   → upload to Claude.ai Settings → Skills
@@ -16,6 +16,19 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 set -e
+
+# ── Dependency check
+if ! command -v zip &>/dev/null; then
+  echo ""
+  echo "  ✗ 'zip' is required but not installed."
+  echo ""
+  echo "  Install it:"
+  echo "    macOS:   brew install zip"
+  echo "    Ubuntu:  sudo apt-get install zip"
+  echo "    Fedora:  sudo dnf install zip"
+  echo ""
+  exit 1
+fi
 
 BOLD="\033[1m"
 GREEN="\033[0;32m"
@@ -34,7 +47,7 @@ log_success() { echo -e "${GREEN}  ✓${RESET} $1"; }
 
 print_banner() {
   echo ""
-  echo -e "${BOLD}${CYAN}Kavro Build Script - v${VERSION}${RESET}"
+  echo -e "${BOLD}${CYAN}Kavro Build Script — v${VERSION}${RESET}"
   echo -e "${DIM}Assembling distributable packages...${RESET}"
   echo ""
 }
@@ -45,7 +58,7 @@ clean() {
   log_success "dist/ removed"
 }
 
-# ── Build Claude package
+# ── Build Claude package ──────────────────────────────────────────────────────
 # Bundles SKILL.md + agents/openai.yaml + references/ (phase files)
 # Output: dist/kavro-claude.zip
 # Install: upload to Claude.ai Settings → Capabilities → Skills
@@ -81,7 +94,7 @@ build_claude() {
   log_info "  kavro/references/ (all 7 phase files + KAVRO.md)"
 }
 
-# ── Build Codex package
+# ── Build Codex package ───────────────────────────────────────────────────────
 # Bundles SKILL.md + agents/openai.yaml + references/ (phase files)
 # Output: dist/kavro-codex.zip
 # Install: unzip to ~/.agents/skills/
@@ -116,13 +129,13 @@ build_codex() {
   log_info "  kavro/references/ (all 7 phase files + KAVRO.md)"
 }
 
-# ── Cleanup staging
+# ── Cleanup staging ───────────────────────────────────────────────────────────
 cleanup_staging() {
   rm -rf "$DIST_DIR/.staging"
   rm -rf "$DIST_DIR/.staging-codex"
 }
 
-# ── Summary
+# ── Summary ───────────────────────────────────────────────────────────────────
 print_summary() {
   echo ""
   echo -e "${BOLD}${GREEN}Build complete.${RESET}"
@@ -130,7 +143,7 @@ print_summary() {
   echo -e "${DIM}Packages in dist/:${RESET}"
   for f in "$DIST_DIR"/*.zip; do
     size=$(du -sh "$f" 2>/dev/null | awk '{print $1}')
-    echo -e "${DIM}  $(basename $f) - $size${RESET}"
+    echo -e "${DIM}  $(basename $f) — $size${RESET}"
   done
   echo ""
   echo -e "${DIM}Next steps:${RESET}"
@@ -139,7 +152,7 @@ print_summary() {
   echo ""
 }
 
-# ── Entry Point
+# ── Entry Point ───────────────────────────────────────────────────────────────
 main() {
   print_banner
   mkdir -p "$DIST_DIR"
