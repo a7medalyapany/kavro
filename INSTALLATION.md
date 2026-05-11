@@ -25,9 +25,20 @@ the right adapter for each one. That's it.
 
 **Scope:** Global - activates across all your projects.
 
+Recommended: use the universal installer which bundles phase files and
+preserves runtime path parity:
+
+```bash
+bash scripts/install.sh --claude
+```
+
+Manual (legacy) install - preserve core/ tree:
+
 ```bash
 # Copy the adapter to Claude Code's skills directory
 cp -r adapters/claude ~/.claude/skills/kavro
+# Also copy the core framework so runtime references resolve:
+cp -r core ~/.claude/skills/kavro/core
 
 # Restart Claude Code
 # Kavro activates automatically on engineering tasks
@@ -36,7 +47,7 @@ cp -r adapters/claude ~/.claude/skills/kavro
 **Verify installation:**
 ```bash
 ls ~/.claude/skills/kavro
-# Should show: SKILL.md  agents/
+# Should show: SKILL.md  agents/ core/
 ```
 
 **Test it:**
@@ -52,16 +63,14 @@ Kavro should activate automatically and open with Phase 1 - not code.
 
 **Scope:** Global - activates across all conversations.
 
-1. Zip the Claude adapter folder:
-```bash
-cd adapters
-zip -r kavro-claude.zip claude/
-```
+1. Build the distributable (recommended) so the package includes the
+   canonical core/ tree, then upload the produced ZIP to Claude.ai:
 
-2. Go to **claude.ai → Settings → Capabilities → Skills**
-3. Click **Upload skill**
-4. Upload `kavro-claude.zip`
-5. Toggle Kavro **on**
+```bash
+# From repo root
+bash scripts/build.sh --claude
+# Upload dist/kavro-claude.zip → claude.ai → Settings → Capabilities → Skills
+```
 
 **Test it:**
 Start a new conversation and type:
@@ -80,8 +89,13 @@ Kavro activates automatically.
 # Ensure the skills directory exists
 mkdir -p ~/.agents/skills
 
-# Copy the adapter
+# Preferred: unzip the built package so core/ is included
+unzip -d ~/.agents/skills dist/kavro-codex.zip
+# this creates ~/.agents/skills/kavro/ with SKILL.md, agents/, core/
+
+# Legacy manual copy (preserve core/):
 cp -r adapters/codex ~/.agents/skills/kavro
+cp -r core ~/.agents/skills/kavro/core
 
 # Restart Codex
 # Kavro activates automatically on engineering tasks
@@ -90,7 +104,7 @@ cp -r adapters/codex ~/.agents/skills/kavro
 **Verify installation:**
 ```bash
 ls ~/.agents/skills/kavro
-# Should show: SKILL.md  agents/
+# Should show: SKILL.md  agents/  core/
 ```
 
 **Test it:**
@@ -277,22 +291,40 @@ If conflicts occur, manually review both files and merge them.
 
 ## Structural Guarantees
 
-When you run `bash scripts/install.sh` or `bash scripts/build.sh --claude` the
-installer and build system now preserve the source path layout under the
-installed skill. Example installed structure for Claude/Codex packages:
 
-~/.claude/skills/kavro/
+When you run `bash scripts/install.sh` or `bash scripts/build.sh --claude` the
+installer and build system preserve the source path layout under the
+installed skill. Below is the exact directory layout produced by
+`bash scripts/build.sh --claude` (contents of dist/kavro-claude.zip):
+
+kavro/
 ├─ SKILL.md
 ├─ agents/
+│  └─ openai.yaml
 ├─ core/
 │  ├─ KAVRO.md
 │  └─ phases/
 │     ├─ 01-research.md
-│     └─ ...
+│     ├─ 02-architecture.md
+│     ├─ 03-decomposition.md
+│     ├─ 04-documentation.md
+│     ├─ 05-prompts.md
+│     ├─ 06-agent-selection.md
+│     └─ 07-governance.md
 
-This ensures any internal references in SKILL.md or adapter templates that
-point to `core/phases/...` or `core/KAVRO.md` work the same in the repo,
-during build, and at runtime after install.
+If you extract the distributable into a runtime skills directory the
+resulting installed layout is identical. For example, after installing to
+Claude Code's skills directory the installed files look like:
+
+~/.claude/skills/kavro/
+├─ SKILL.md
+├─ agents/openai.yaml
+├─ core/KAVRO.md
+└─ core/phases/01-research.md
+
+This exact parity guarantees any references in SKILL.md or adapter
+templates that point to `core/phases/...` or `core/KAVRO.md` resolve the same
+in the repo, in dist packages, and at runtime after installation.
 
 ## Validation (developer)
 
@@ -304,5 +336,5 @@ make validate-dist    # builds dist/ packages and validates contents
 make test-install     # simulates install/uninstall in a temp HOME
 ```
 
-*Kavro v1.0.0 - Think before you build.*
+*Kavro v1.0.1 - Think before you build.*
 *https://github.com/a7medalyapany/kavro*

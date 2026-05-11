@@ -45,10 +45,12 @@ log_warn()    { echo -e "${YELLOW}  ⚠${RESET} $1"; }
 log_error()   { echo -e "${RED}  ✗${RESET} $1"; }
 log_step()    { echo -e "\n${BOLD}$1${RESET}"; }
 
-# ── Bundle phase files into references/
-# Enables Claude Code and Codex Level 3 progressive disclosure:
-# the agent loads the full phase spec only when that phase is active,
-# keeping context window lean and focused throughout execution.
+# ── Bundle phase files into core/phases/
+# Enables Level 3 progressive disclosure for global packages (Claude, Codex)
+# and ensures runtime references (core/phases/* and core/KAVRO.md) resolve
+# identically after installation. For project-scoped installs (Cursor,
+# Windsurf) we also copy the core/ tree into the project root so local
+# rules that reference core/phases/* resolve.
 bundle_phases() {
   local target_dir="$1"
   # Preserve source structure under target_dir/core/phases so runtime
@@ -162,6 +164,15 @@ install_cursor() {
     cp "$SOURCE" "$TARGET"
     log_success "Installed to $TARGET"
   fi
+
+  # Ensure the project's core/ tree exists so references in .cursorrules
+  # like core/phases/01-research.md resolve inside the project.
+  if [ -d "$PWD/core" ]; then
+    log_info "Project already contains core/ — skipping copy"
+  else
+    cp -r "$REPO_ROOT/core" "$PWD/core"
+    log_info "Copied core/ into project root → core/"
+  fi
 }
 
 install_windsurf() {
@@ -187,6 +198,17 @@ install_windsurf() {
   fi
 
   log_info "For global activation: Windsurf → Settings → AI Rules → Global Rules"
+}
+
+# When installing Windsurf project-scoped rules, also ensure core/ exists
+# in the project root so the rules' references to core/phases/* resolve.
+install_windsurf_project_core() {
+  if [ -d "$PWD/core" ]; then
+    log_info "Project already contains core/ — skipping copy"
+  else
+    cp -r "$REPO_ROOT/core" "$PWD/core"
+    log_info "Copied core/ into project root → core/"
+  fi
 }
 
 # ── Uninstaller
