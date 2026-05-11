@@ -261,15 +261,48 @@ Check the description field in `adapters/[tool]/SKILL.md`.
 Try explicitly invoking: `$kavro` (Codex CLI) or mention "use Kavro" (Claude.ai).
 
 **Phase files not found (Claude Code / Codex)**
-The phase files need to be in the adapter's `references/` folder for
-Level 3 loading. See the cleanup pass in the roadmap. The skill is
-fully functional without them - the SKILL.md is self-contained.
+The phase files are bundled into the installed adapter under
+`<skill>/core/phases/` and the full framework is at `<skill>/core/KAVRO.md`.
+This mirrors the repository layout exactly so runtime references like
+`core/phases/01-research.md` resolve identically in development and
+after installation/build. The skill is fully functional without the
+phase files; they enable Level 3 progressive disclosure (loading the
+full phase spec only when active).
 
 **Cursor rules conflict with existing `.cursorrules`**
 Your existing rules are backed up to `.cursorrules.bak`.
 If conflicts occur, manually review both files and merge them.
 
 ---
+
+## Structural Guarantees
+
+When you run `bash scripts/install.sh` or `bash scripts/build.sh --claude` the
+installer and build system now preserve the source path layout under the
+installed skill. Example installed structure for Claude/Codex packages:
+
+~/.claude/skills/kavro/
+├─ SKILL.md
+├─ agents/
+├─ core/
+│  ├─ KAVRO.md
+│  └─ phases/
+│     ├─ 01-research.md
+│     └─ ...
+
+This ensures any internal references in SKILL.md or adapter templates that
+point to `core/phases/...` or `core/KAVRO.md` work the same in the repo,
+during build, and at runtime after install.
+
+## Validation (developer)
+
+Run the included validation scripts to ensure path parity:
+
+```bash
+make test-paths       # scans the repo for broken or mixed path references
+make validate-dist    # builds dist/ packages and validates contents
+make test-install     # simulates install/uninstall in a temp HOME
+```
 
 *Kavro v1.0.0 - Think before you build.*
 *https://github.com/a7medalyapany/kavro*

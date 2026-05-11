@@ -67,19 +67,23 @@ build_claude() {
 
   STAGING="$DIST_DIR/.staging/kavro"
   mkdir -p "$STAGING/agents"
-  mkdir -p "$STAGING/references"
+  # Preserve source structure in distributed package so runtime paths
+  # referenced from SKILL.md remain valid. We copy into kavro/core/phases
+  mkdir -p "$STAGING/core/phases"
 
   # Core adapter files
   cp "$REPO_ROOT/adapters/claude/SKILL.md" "$STAGING/SKILL.md"
   cp "$REPO_ROOT/adapters/claude/agents/openai.yaml" "$STAGING/agents/openai.yaml"
 
-  # Bundle phase files as references for Level 3 progressive disclosure
+  # Bundle phase files preserving the core/phases path so runtime
+  # references (e.g. core/phases/01-research.md) resolve correctly.
   for phase_file in "$PHASES_DIR"/*.md; do
-    cp "$phase_file" "$STAGING/references/"
+    cp "$phase_file" "$STAGING/core/phases/"
   done
 
-  # Bundle core framework as a reference
-  cp "$REPO_ROOT/core/KAVRO.md" "$STAGING/references/KAVRO.md"
+  # Bundle core framework into core/KAVRO.md
+  mkdir -p "$STAGING/core"
+  cp "$REPO_ROOT/core/KAVRO.md" "$STAGING/core/KAVRO.md"
 
   # Create zip
   cd "$DIST_DIR/.staging"
@@ -91,7 +95,8 @@ build_claude() {
   log_info "Contents:"
   log_info "  kavro/SKILL.md"
   log_info "  kavro/agents/openai.yaml"
-  log_info "  kavro/references/ (all 7 phase files + KAVRO.md)"
+  log_info "  kavro/core/phases/ (all 7 phase files)"
+  log_info "  kavro/core/KAVRO.md"
 }
 
 # ── Build Codex package ───────────────────────────────────────────────────────
@@ -103,18 +108,19 @@ build_codex() {
 
   STAGING="$DIST_DIR/.staging-codex/kavro"
   mkdir -p "$STAGING/agents"
-  mkdir -p "$STAGING/references"
+  mkdir -p "$STAGING/core/phases"
 
   # Core adapter files
   cp "$REPO_ROOT/adapters/codex/SKILL.md" "$STAGING/SKILL.md"
   cp "$REPO_ROOT/adapters/codex/agents/openai.yaml" "$STAGING/agents/openai.yaml"
 
-  # Bundle phase files as references
+  # Bundle phase files preserving the core/phases path
   for phase_file in "$PHASES_DIR"/*.md; do
-    cp "$phase_file" "$STAGING/references/"
+    cp "$phase_file" "$STAGING/core/phases/"
   done
 
-  cp "$REPO_ROOT/core/KAVRO.md" "$STAGING/references/KAVRO.md"
+  mkdir -p "$STAGING/core"
+  cp "$REPO_ROOT/core/KAVRO.md" "$STAGING/core/KAVRO.md"
 
   # Create zip
   cd "$DIST_DIR/.staging-codex"
@@ -126,7 +132,8 @@ build_codex() {
   log_info "Contents:"
   log_info "  kavro/SKILL.md"
   log_info "  kavro/agents/openai.yaml"
-  log_info "  kavro/references/ (all 7 phase files + KAVRO.md)"
+  log_info "  kavro/core/phases/ (all 7 phase files)"
+  log_info "  kavro/core/KAVRO.md"
 }
 
 # ── Cleanup staging ───────────────────────────────────────────────────────────

@@ -127,6 +127,19 @@ cp kavro/adapters/windsurf/rules.md /path/to/your/project/.windsurfrules
 
 See [INSTALLATION.md](./INSTALLATION.md) for detailed per-tool instructions and troubleshooting.
 
+## Build & Validation
+
+The build and installer preserve the source layout under the installed
+skill so runtime references like `core/phases/01-research.md` resolve the
+same in dev, in dist packages, and after installation. Use the included
+validation scripts during development and in CI:
+
+```bash
+make test-paths       # scans the repo for broken or mixed path references
+make validate-dist    # builds dist/ packages and validates contents
+make test-install     # simulates install/uninstall in a temp HOME
+```
+
 ---
 
 ## Usage
