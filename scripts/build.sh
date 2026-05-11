@@ -59,7 +59,7 @@ clean() {
 }
 
 # ── Build Claude package ──────────────────────────────────────────────────────
-# Bundles SKILL.md + agents/openai.yaml + references/ (phase files)
+# Bundles SKILL.md + agents/openai.yaml + core/ (phase files preserved)
 # Output: dist/kavro-claude.zip
 # Install: upload to Claude.ai Settings → Capabilities → Skills
 build_claude() {
@@ -100,7 +100,7 @@ build_claude() {
 }
 
 # ── Build Codex package ───────────────────────────────────────────────────────
-# Bundles SKILL.md + agents/openai.yaml + references/ (phase files)
+# Bundles SKILL.md + agents/openai.yaml + core/ (phase files preserved)
 # Output: dist/kavro-codex.zip
 # Install: unzip to ~/.agents/skills/
 build_codex() {

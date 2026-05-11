@@ -28,7 +28,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ### Architecture
 - Single source of truth in `core/` - adapters never duplicate phase logic
-- Phase files bundled into `references/` at install time for Level 3 progressive disclosure
+- Phase files bundled into `core/` at install/build time for Level 3 progressive disclosure
 - `dist/` packages assembled by `build.sh` - not stored in the repository
 
 ---
@@ -38,7 +38,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ### [1.1.0] - Planned
 - Gemini CLI adapter
 - GitHub Copilot custom instructions adapter
-- `references/` symlink cleanup for repo-level clarity
+- packaging/cleanup tasks to ensure core/ is canonical across tools
 - agentskills.io registry submission
 
 ### [2.0.0] - Long-term
