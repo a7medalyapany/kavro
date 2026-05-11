@@ -1,7 +1,29 @@
+# Generated build artifacts - never commit these
+dist/
+
+# macOS
 .DS_Store
-.env
-.env*
-node_modules/
-*.log
+.AppleDouble
+.LSOverride
+
+# Editors
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Backup files created by installer
+*.bak
+
+# Node (if any tooling is added later)
+node_modules/
